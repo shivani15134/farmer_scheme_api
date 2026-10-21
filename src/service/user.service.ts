@@ -4,20 +4,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Farmer } from '../entity/user.entity.js';
 import { AddUserDto } from '../dto/add-user.dto.js';
-import { Schemes } from '../entity/scheme.entity.js';
 import { UpdateUserDto } from '../dto/update-user.dto.js';
-import { ReplaceUserDto } from '../dto/replace.user.dto.js';
 import { States } from '../entity/states.entity.js';
 
 @Injectable()
 export class FarmersService {
     constructor(
-        @InjectRepository(Farmer) private userRepo: Repository<Farmer>,
-
-        @InjectRepository(Schemes)
-        private schemeRepo: Repository<Schemes>,
-
-    ) { }
+        @InjectRepository(Farmer) private userRepo: Repository<Farmer>) {}
 
 
     async findAll(page = 1, limit = 100) {
@@ -85,12 +78,12 @@ export class FarmersService {
             );
         }
 
-        await this.userRepo.delete(id);
+        await this.userRepo.delete(id); 
 
         return { message: 'Farmer deleted successfully.' };
     }
 
-    async updateUser(id: string, dto: ReplaceUserDto) {
+    async updateUser(id: string, dto: UpdateUserDto) {
         const farmer = await this.userRepo.findOne({
             where: { id },
         });
@@ -99,13 +92,18 @@ export class FarmersService {
             throw new NotFoundException('Farmer not found.');
         }
 
+        farmer.first_name = dto.first_name;
+        farmer.last_name = dto.last_name;
+        farmer.date_of_birth = new Date(dto.date_of_birth);
+        farmer.address_1 = dto.address_1;
+
         farmer.middle_name = dto.middle_name ?? null;
         farmer.address_2 = dto.address_2 ?? null;
         farmer.locality_name = dto.locality_name ?? null;
         farmer.gender = dto.gender ?? null;
 
         farmer.state_name = dto.state_id
-            ? { id: dto.state_id } as States
+            ? ({ id: dto.state_id } as States)
             : null;
 
         await this.userRepo.save(farmer);

@@ -1,36 +1,33 @@
 import {
   IsString,
   IsNotEmpty,
-  IsOptional,
-  IsDate,
-  IsUUID,
   IsDateString,
+  IsOptional,
+  IsUUID,
 } from 'class-validator';
 
 export class AddUserDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'first_name is required' })
   first_name: string;
 
   @IsOptional()
   @IsString()
+  middle_name?: string;
+
+  @IsString()
+  @IsNotEmpty({ message: 'last_name is required' })
   last_name: string;
 
-  @IsOptional()
-  @IsDateString()
-  date_of_birth: Date;
+  @IsDateString(
+    {},
+    { message: 'date_of_birth must be a valid date string' },
+  )
+  date_of_birth: string;
 
-  @IsOptional()
   @IsString()
-  gender: string;
-
-  @IsOptional()
-  @IsString()
+  @IsNotEmpty({ message: 'address_1 is required' })
   address_1: string;
-
-  @IsOptional()
-  @IsString()
-  middle_name?: string;
 
   @IsOptional()
   @IsString()
@@ -41,7 +38,10 @@ export class AddUserDto {
   locality_name?: string;
 
   @IsOptional()
-  @IsUUID()
-  state_id?: string;
+  @IsString()
+  gender?: string;
 
+  @IsOptional()
+  @IsUUID(undefined, { message: 'state_id must be a valid UUID' })
+  state_id?: string;
 }

@@ -1,44 +1,42 @@
 import {
   IsString,
   IsNotEmpty,
-  IsOptional,
   IsDateString,
   IsUUID,
 } from 'class-validator';
 
 export class UpdateUserDto {
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'first_name is required' })
   first_name: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'last_name is required' })
   last_name: string;
 
-  @IsDateString()
+  @IsDateString({},{ message: 'date_of_birth must be a valid date string' })
   date_of_birth: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'address_1 is required' })
   address_1: string;
 
-  @IsOptional()
   @IsString()
-  middle_name?: string;
+  @IsNotEmpty({ message: 'middle_name is required' })
+  middle_name: string;
 
-  @IsOptional()
   @IsString()
-  address_2?: string;
+  @IsNotEmpty({ message: 'address_2 is required' })
+  address_2: string;
 
-  @IsOptional()
   @IsString()
-  locality_name?: string;
+  @IsNotEmpty({ message: 'locality_name is required' })
+  locality_name: string;
 
-  @IsOptional()
   @IsString()
-  gender?: string;
+  @IsNotEmpty({ message: 'gender is required' })
+  gender: string;
 
-  @IsOptional()
-  @IsUUID()
-  state_id?: string;
+  @IsUUID(undefined, { message: 'state_id must be a valid UUID' })
+  state_id: string;
 }
