@@ -1,5 +1,5 @@
 
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AssociatedUser } from '../entity/associate.user.entity.js';
@@ -8,34 +8,46 @@ import { UpdateAssociatedUserDto } from '../dto/update-associated-user.dto.js';
 
 @Injectable()
 export class AssociatedUserService {
-    constructor(@InjectRepository(AssociatedUser) private associateduserRepo: Repository<AssociatedUser>) { }
+  constructor(@InjectRepository(AssociatedUser) private associateduserRepo: Repository<AssociatedUser>) { }
 
-    findAll() {
-        return this.associateduserRepo.find({
-            relations: { farmer: true, scheme: true },
-        });
+  findAll() {
+    return this.associateduserRepo.find({
+      relations: { farmer: true, scheme: true },
+    });
+  }
+
+  async create(associateduserdto: AssociateUserDto) {
+    const existingAssociation = await this.associateduserRepo.findOne({
+      where: {
+        farmer: { id: associateduserdto.farmer_id },
+        scheme: { id: associateduserdto.scheme_id },
+      },
+    });
+
+    if (existingAssociation) {
+      throw new ConflictException(
+        'This farmer is already associated with this scheme.',
+      );
     }
 
-async create(associateduserdto: AssociateUserDto) {
-  
-  const associateduser = this.associateduserRepo.create({
-    farmer: { id: associateduserdto.farmer_id },
-    scheme: { id: associateduserdto.scheme_id },
+    const associateduser = this.associateduserRepo.create({
+      farmer: { id: associateduserdto.farmer_id },
+      scheme: { id: associateduserdto.scheme_id },
 
-    enrollment_start_date: new Date(
-      associateduserdto.enrollment_start_date,
-    ),
+      enrollment_start_date: new Date(
+        associateduserdto.enrollment_start_date,
+      ),
 
-    enrollment_end_date: associateduserdto.enrollment_end_date
-      ? new Date(associateduserdto.enrollment_end_date)
-      : null,
-  });
+      enrollment_end_date: associateduserdto.enrollment_end_date
+        ? new Date(associateduserdto.enrollment_end_date)
+        : null,
+    });
 
-  return this.associateduserRepo.save(associateduser);
-}
+    return this.associateduserRepo.save(associateduser);
+  }
 
 
-    async update(id: string, dto: UpdateAssociatedUserDto) {
+  async update(id: string, dto: UpdateAssociatedUserDto) {
     const associatedUser = await this.associateduserRepo.findOne({
       where: { id },
     });
