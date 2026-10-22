@@ -17,6 +17,7 @@ export class AssociatedUserService {
     }
 
 async create(associateduserdto: AssociateUserDto) {
+  
   const associateduser = this.associateduserRepo.create({
     farmer: { id: associateduserdto.farmer_id },
     scheme: { id: associateduserdto.scheme_id },

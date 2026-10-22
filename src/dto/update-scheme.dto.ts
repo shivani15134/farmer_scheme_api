@@ -1,4 +1,5 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { AddSchemeDto } from './add-scheme.dto.js';
+import { PartialType } from '@nestjs/swagger';
+
 
 export class UpdateSchemeDto extends PartialType(AddSchemeDto) {}
