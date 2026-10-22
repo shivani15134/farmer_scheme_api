@@ -6,6 +6,7 @@ import {
   JoinColumn,
   Column,
   CreateDateColumn,
+  Unique,
 } from "typeorm";
 
 import type { Relation } from "typeorm";
@@ -13,7 +14,9 @@ import { Farmer } from "./user.entity.js";
 import { Schemes } from "./scheme.entity.js";
 import { IsDateString } from "class-validator";
 
+
 @Entity("farmer_schemes")
+@Unique(['farmer', 'scheme'])
 export class AssociatedUser {
   @PrimaryGeneratedColumn()
   id: string;

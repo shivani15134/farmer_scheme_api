@@ -25,6 +25,14 @@ export class AddUserDto {
   })
 
   @ApiProperty({
+    description: 'Farmer first name',
+    example: 'Singh',
+  })
+  @IsString()
+  middle_name?: string;
+
+
+  @ApiProperty({
     description: 'Farmer last name',
     example: 'Sharma',
   })

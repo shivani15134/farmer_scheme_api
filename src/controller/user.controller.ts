@@ -107,9 +107,9 @@ export class FarmersController {
   @ApiNotFoundResponse({
     description: 'Farmer not found',
   })
-  @ApiBadRequestResponse({
-    description: 'Invalid farmer data',
-  })
+  // @ApiBadRequestResponse({
+  //   description: 'Invalid farmer data',
+  // })
   @ApiParam({
     name: 'id',
     description: 'Unique ID of the farmer to update',
@@ -118,9 +118,9 @@ export class FarmersController {
   @HttpCode(HttpStatus.OK)
   async update(
     @Param('id') id: string,
-    @Body() addUserDto: AddUserDto,
+    @Body() updateUserDto: UpdateUserDto,
   ) {
-    const farmer = await this.farmerService.update(id, addUserDto);
+    const farmer = await this.farmerService.update(id, updateUserDto);
 
     return {
       statusCode: HttpStatus.OK,
@@ -150,9 +150,9 @@ export class FarmersController {
   @HttpCode(HttpStatus.OK)
   async updateUser(
     @Param('id') id: string,
-    @Body() updateUserDto: UpdateUserDto,
+    @Body() AddUserDto: AddUserDto,
   ) {
-    const farmer = await this.farmerService.updateUser(id, updateUserDto);
+    const farmer = await this.farmerService.updateUser(id, AddUserDto);
 
     return {
       statusCode: HttpStatus.OK,
@@ -215,3 +215,7 @@ export class FarmersController {
     };
   }
 }
+
+
+
+///CHECK PUT METHOD DESCRIPTION AS ITS USSES THE SAME DTO AS ADD

@@ -83,7 +83,7 @@ export class FarmersService {
         return { message: 'Farmer deleted successfully.' };
     }
 
-    async updateUser(id: string, dto: UpdateUserDto) {
+    async updateUser(id: string, dto: AddUserDto) {
         const farmer = await this.userRepo.findOne({
             where: { id },
         });
