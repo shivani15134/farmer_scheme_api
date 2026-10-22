@@ -1,5 +1,5 @@
 
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { AssociatedUser } from '../entity/associate.user.entity.js';
@@ -17,18 +17,7 @@ export class AssociatedUserService {
     }
 
 async create(associateduserdto: AssociateUserDto) {
-  const existingAssociation = await this.associateduserRepo.findOne({
-    where: {
-      farmer: { id: associateduserdto.farmer_id },
-      scheme: { id: associateduserdto.scheme_id },
-    },
-  });
-
-  if (existingAssociation) {
-    throw new ConflictException(
-      'This farmer is already associated with this scheme.',
-    );
-  }
+  
   const associateduser = this.associateduserRepo.create({
     farmer: { id: associateduserdto.farmer_id },
     scheme: { id: associateduserdto.scheme_id },
